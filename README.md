@@ -52,7 +52,7 @@ uv run -p 3.14+freethreaded python -X gil=0 src/main.py
 ```
 
 ---
-**Nota:** Il flag `-X gil=0` utilizzato in fase di esecuzione garantisce che l'interprete Python venga avviato disabilitando il Global Interpreter Lock (GIL), consentendo il reale parallelismo dei thread.
+**Nota:** Il flag `-X gil=0` utilizzato in fase di esecuzione garantisce che l'interprete Python venga avviato disabilitando il GIL.
 
 ## Grafici
 Dopo aver raccolto i dati (che verranno salvati in `results/dumps/`), generare i plot con:
