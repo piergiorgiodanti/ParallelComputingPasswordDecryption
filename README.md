@@ -22,32 +22,32 @@ A seconda del sistema operativo utilizzato, aprire il terminale nella cartella r
 ### macOS / Linux
 
 ```bash
-# 1. Installazione versione di Python
+# Installazione versione di Python
 uv python install 3.14+freethreaded
 
-# 2. Creazione dell'ambiente virtuale
+# Creazione dell'ambiente virtuale
 uv venv -p 3.14+freethreaded
 
-# 3. Attivazione dell'ambiente virtuale
+# Attivazione dell'ambiente virtuale
 source .venv/bin/activate
 
-# 4. Esecuzione (con GIL disabilitato)
+# Esecuzione (con GIL disabilitato)
 uv run -p 3.14+freethreaded python -X gil=0 src/main.py
 ```
 
 ### Windows
 
 ```powershell
-# 1. Installazione versione di Python
+# Installazione versione di Python
 uv python install 3.14+freethreaded
 
-# 2. Creazione dell'ambiente virtuale
+# Creazione dell'ambiente virtuale
 uv venv -p 3.14+freethreaded
 
-# 3. Attivazione dell'ambiente virtuale
+# Attivazione dell'ambiente virtuale
 .venv\Scripts\activate
 
-# 4. Esecuzione (con GIL disabilitato)
+# Esecuzione (con GIL disabilitato)
 uv run -p 3.14+freethreaded python -X gil=0 src/main.py
 ```
 
