@@ -10,7 +10,7 @@ Il progetto utilizza **uv** per la gestione dell'ambiente e delle dipendenze. Pe
   ```bash
   curl -LsSf [https://astral.sh/uv/install.sh](https://astral.sh/uv/install.sh) | sh
   ```
-* **Windows (PowerShell):**
+* **Windows:**
   ```powershell
   powershell -c "irm [https://astral.sh/uv/install.ps1](https://astral.sh/uv/install.ps1) | iex"
   ```
