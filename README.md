@@ -4,7 +4,7 @@ Implementazione sequenziale e parallela di un algoritmo di brute force per la de
 
 ## Prerequisiti
 
-Il progetto utilizza **uv** per la gestione dell'ambiente e delle dipendenze. Se non è già installato nel sistema, procedere con i seguenti comandi:
+Il progetto utilizza **uv** per la gestione dell'ambiente e delle dipendenze. Per installare:
 
 * **macOS / Linux:**
   ```bash
