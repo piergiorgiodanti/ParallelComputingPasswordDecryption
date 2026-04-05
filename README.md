@@ -1,6 +1,6 @@
 # Parallel Computing: Password Decryption
 
-Implementazione sequenziale e parallela di un algoritmo di brute force di password decryption.
+Implementazione sequenziale e parallela di un algoritmo di brute force per la decrittazione di password, sviluppata in Python 3.14 (no-GIL) tramite la classe **ThreadPoolExecutor**.
 
 ## 1. Prerequisiti: Installazione di `uv`
 
