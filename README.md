@@ -2,7 +2,7 @@
 
 Implementazione sequenziale e parallela di un algoritmo di brute force per la decrittazione di password, sviluppata in Python 3.14 (no-GIL) tramite la classe **ThreadPoolExecutor**.
 
-## 1. Prerequisiti: Installazione di `uv`
+## Prerequisiti: Installazione di `uv`
 
 Il progetto utilizza **uv** per la gestione dell'ambiente e delle dipendenze. Se non è già installato nel sistema, procedere con i seguenti comandi:
 
@@ -15,7 +15,7 @@ Il progetto utilizza **uv** per la gestione dell'ambiente e delle dipendenze. Se
   powershell -c "irm [https://astral.sh/uv/install.ps1](https://astral.sh/uv/install.ps1) | iex"
   ```
 
-## 2. Configurazione ed Esecuzione
+## Configurazione ed Esecuzione
 
 A seconda del sistema operativo utilizzato, aprire il terminale nella cartella radice del progetto ed eseguire i comandi in sequenza.
 
