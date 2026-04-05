@@ -16,9 +16,6 @@ Il progetto utilizza **uv** per la gestione dell'ambiente e delle dipendenze. Pe
   ```
 
 ## Configurazione ed Esecuzione
-
-A seconda del sistema operativo utilizzato, aprire il terminale nella cartella radice del progetto ed eseguire i comandi in sequenza.
-
 ### macOS / Linux
 
 ```bash
@@ -52,7 +49,7 @@ uv run -p 3.14+freethreaded python -X gil=0 src/main.py
 ```
 
 ---
-**Nota:** Il flag `-X gil=0` utilizzato in fase di esecuzione garantisce che l'interprete Python venga avviato disabilitando il GIL.
+**Nota:** Il flag `-X gil=0` utilizzato in fase di esecuzione garantisce che l'interprete Python venga avviato disabilitando il GIL, rendendo possibile l'utilizzo del multithreading.
 
 ## Grafici
 Dopo aver raccolto i dati (che verranno salvati in `results/dumps/`), generare i plot con:
