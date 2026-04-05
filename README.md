@@ -2,7 +2,7 @@
 
 Implementazione sequenziale e parallela di un algoritmo di brute force per la decrittazione di password, sviluppata in Python 3.14 (no-GIL) tramite la classe **ThreadPoolExecutor**.
 
-## Prerequisiti: Installazione di `uv`
+## Prerequisiti
 
 Il progetto utilizza **uv** per la gestione dell'ambiente e delle dipendenze. Se non è già installato nel sistema, procedere con i seguenti comandi:
 
@@ -53,3 +53,10 @@ uv run -p 3.14+freethreaded python -X gil=0 src/main.py
 
 ---
 **Nota:** Il flag `-X gil=0` utilizzato in fase di esecuzione garantisce che l'interprete Python venga avviato disabilitando il Global Interpreter Lock (GIL), consentendo il reale parallelismo dei thread.
+
+## Grafici
+Dopo aver raccolto i dati (che verranno salvati in `results/dumps/`), generare i plot con:
+```bash
+cd utils
+uv run python plots.py
+```
