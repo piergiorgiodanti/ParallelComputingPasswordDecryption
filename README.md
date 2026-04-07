@@ -8,7 +8,7 @@ Il progetto utilizza **uv** per la gestione dell'ambiente e delle dipendenze. Pe
 
 * **macOS / Linux:**
   ```bash
-  curl -LsSf [https://astral.sh/uv/install.sh](https://astral.sh/uv/install.sh) | sh
+  curl -LsSf https://astral.sh/uv/install.sh | sh
   ```
 * **Windows:**
   ```powershell
