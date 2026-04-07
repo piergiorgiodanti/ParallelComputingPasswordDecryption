@@ -108,7 +108,7 @@ def print_info_GIL():
     print("Py_GIL_DISABLED:", sysconfig.get_config_var("Py_GIL_DISABLED"))
     print("is_gil_disabled:", is_gil_disabled())
 
-if __name__ == "__main__":
+def main():
 
     print_info_GIL()
 
@@ -231,3 +231,6 @@ if __name__ == "__main__":
         with open(file_path, 'w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerows(dump_data_weakscaling)
+
+if __name__ == "__main__":
+    main()
