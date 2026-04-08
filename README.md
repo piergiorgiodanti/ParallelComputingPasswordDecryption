@@ -29,7 +29,7 @@ uv venv -p 3.14+freethreaded
 source .venv/bin/activate
 
 # Esecuzione (con GIL disabilitato)
-uv run -p 3.14+freethreaded python -X gil=0 src/main.py
+uv run -p 3.14+freethreaded python -X gil=0 src/password_decryption.py
 ```
 
 ### Windows
