@@ -28,8 +28,11 @@ uv venv -p 3.14+freethreaded
 # Attivazione dell'ambiente virtuale
 source .venv/bin/activate
 
-# Esecuzione (con GIL disabilitato)
-uv run -p 3.14+freethreaded python -X gil=0 src/password_decryption.py
+# Esecuzione demo (con GIL disabilitato)
+uv run -p 3.14+freethreaded python -X gil=0 src/main.py demo
+
+# Esecuzione benchmarks (con GIL disabilitato)
+uv run -p 3.14+freethreaded python -X gil=0 src/main.py benchmarks
 ```
 
 ### Windows
@@ -44,8 +47,11 @@ uv venv -p 3.14+freethreaded
 # Attivazione dell'ambiente virtuale
 .venv\Scripts\activate
 
-# Esecuzione (con GIL disabilitato)
-uv run -p 3.14+freethreaded python -X gil=0 src/main.py
+# Esecuzione demo (con GIL disabilitato)
+uv run -p 3.14+freethreaded python -X gil=0 src/main.py demo
+
+# Esecuzione benchmarks (con GIL disabilitato)
+uv run -p 3.14+freethreaded python -X gil=0 src/main.py benchmarks
 ```
 
 ---
