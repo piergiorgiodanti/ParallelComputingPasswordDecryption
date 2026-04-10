@@ -152,6 +152,8 @@ def run_benchmarks():
     passwords = ["01011990", "15082005", "31122026"]
     targets = build_targets(passwords)
 
+    print(f"\nLista di password: {passwords} da trovare.")
+
     file_path = "../results/dump/dump_data.csv"
     dump_data = [['Implementazione', 'Threads', 'Chunk Size', 'Tempo Medio', 'Deviazione Standard']]
 
@@ -182,7 +184,7 @@ def run_benchmarks():
 
 def run_demo():
     print_info_GIL()
-    passwords = ["01011990", "15082005", "31122026"]
+    passwords = ["01011990", "f5082005", "31122026"]
     targets = build_targets(passwords)
     threads = 4
     chunk_size = c.N // (threads * 10)
@@ -192,7 +194,7 @@ def run_demo():
     print("\nSequenziale:")
 
     start = time.perf_counter()
-    passwords_trovate = p.decrypt_passwords(targets)
+    passwords_trovate = 0 # p.decrypt_passwords(targets)
     end = time.perf_counter()
 
     print(f"Passwords trovate: {passwords_trovate}")
@@ -207,11 +209,10 @@ def run_demo():
     print(f"Passwords trovate: {passwords_trovate}")
     print("Tempo di esecuzione: ", end - start)
 
-
     print("\nParallela con thread:")
 
     start = time.perf_counter()
-    passwords_trovate = p.decrypt_password_par_threads(targets, threads, chunk_size)
+    passwords_trovate = 0 # p.decrypt_password_par_threads(targets, threads, chunk_size)
     end = time.perf_counter()
 
     print(f"Passwords trovate: {passwords_trovate}")

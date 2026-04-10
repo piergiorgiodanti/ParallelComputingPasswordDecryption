@@ -1,13 +1,13 @@
 import threading
 from passlib.hash import des_crypt
 import random
-from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
+from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED, as_completed
 import itertools
 import config
 
 def encrypt_password(password_in_chiaro):
     if len(password_in_chiaro) > 8:
-        raise ValueError("La password non può superare gli 8 caratteri!")
+        raise ValueError("La password non può superare gli 8 caratteri.")
 
     salt = "".join(random.choices(config.CHARSET, k=2))
     hash_criptato = des_crypt.hash(password_in_chiaro, salt=salt)
@@ -45,31 +45,42 @@ def decrypt_password_par_pool(target_hashes, num_workers, chunk_size):
     stop_event = threading.Event()
     passwords_trovate = {}
     total_targets = len(target_hashes)
-    end_list = False
 
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
         futures = set()
 
-        while not stop_event.is_set() and not end_list:
-            for _ in range(num_workers):
-                chunk = list(itertools.islice(iterator, chunk_size))
-                if not chunk:
-                    end_list = True
-                    break
-                futures.add(executor.submit(check_chunk, chunk, target_hashes, stop_event))
+        # Si riempiono il pool con i primi task
+        for _ in range(num_workers):
+            chunk = list(itertools.islice(iterator, chunk_size))
+            if not chunk:
+                break
+            futures.add(executor.submit(check_chunk, chunk, target_hashes, stop_event))
 
-            # Si aspetta che almeno uno dei task sia completato
-            done, futures = wait(futures, return_when=FIRST_COMPLETED)
+        while futures and not stop_event.is_set():
+            # Si aspetta che almeno task finisca
+            done, not_done = wait(futures, return_when=FIRST_COMPLETED)
 
+            # Si analizza i task completati
             for future in done:
                 result = future.result()
                 if result:
                     passwords_trovate.update(result)
-                    # Se abbiamo trovato tutte le password, segnaliamo lo stop e usciamo
+                    # Se trovato tutti i task si termina la ricerca
                     if len(passwords_trovate) >= total_targets:
                         stop_event.set()
                         return passwords_trovate
 
+            # futures correnti con solo quelli non ancora finiti
+            futures = not_done
+
+            # Se non abbiamo finito di cercare, si rimpiazzano i task appena terminati
+            if not stop_event.is_set():
+                for _ in range(len(done)):
+                    chunk = list(itertools.islice(iterator, chunk_size))
+                    if chunk:  # si abilita un nuovo task solo se c'è ancora qualcosa nell'iteratore
+                        futures.add(executor.submit(check_chunk, chunk, target_hashes, stop_event))
+                    else:
+                        break
     return passwords_trovate
 
 def decrypt_password_par_threads(target_hashes, num_workers, chunk_size):
@@ -88,9 +99,9 @@ def decrypt_password_par_threads(target_hashes, num_workers, chunk_size):
             if len(passwords_trovate) >= total_targets:
                 stop_event.set()
 
-    threads: list[threading.Thread] = []
-
     while not stop_event.is_set() and not end_list:
+        threads: list[threading.Thread] = []
+
         for i in range(num_workers):
             chunk = list(itertools.islice(iterator, chunk_size))
             if not chunk:
