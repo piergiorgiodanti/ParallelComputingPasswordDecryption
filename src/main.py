@@ -194,7 +194,7 @@ def run_demo():
     print("\nSequenziale:")
 
     start = time.perf_counter()
-    passwords_trovate = 0 # p.decrypt_passwords(targets)
+    passwords_trovate = p.decrypt_passwords(targets)
     end = time.perf_counter()
 
     print(f"Passwords trovate: {passwords_trovate}")
@@ -212,7 +212,7 @@ def run_demo():
     print("\nParallela con thread:")
 
     start = time.perf_counter()
-    passwords_trovate = 0 # p.decrypt_password_par_threads(targets, threads, chunk_size)
+    passwords_trovate = p.decrypt_password_par_threads(targets, threads, chunk_size)
     end = time.perf_counter()
 
     print(f"Passwords trovate: {passwords_trovate}")
