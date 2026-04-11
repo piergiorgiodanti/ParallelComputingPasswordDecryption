@@ -1,0 +1,33 @@
+name: Python No-GIL CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test-and-benchmark:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Install Python 3.14t (Free-threaded)
+        run: uv python install 3.14+freethreaded
+
+      - name: Install Dependencies
+        run: uv sync --python 3.14+freethreaded
+
+      - name: Run Validation / Demo (No-GIL)
+        run: uv run -p 3.14+freethreaded python -X gil=0 src/main.py demo
