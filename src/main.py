@@ -181,7 +181,7 @@ def run_benchmarks():
 
 def run_demo():
     print_info_GIL()
-    passwords = ["01011990", "f5082005", "31122026"]
+    passwords = ["01011990", "05082005", "31122026"]
     targets = build_targets(passwords)
     threads = 4
     chunk_size = c.N // (threads * 1000)

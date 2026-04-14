@@ -16,11 +16,10 @@ std_seq = float(seq_row['Deviazione Standard'])
 
 df_pool = df_strong[df_strong['Implementazione'] == 'Parallel Pool'].copy()
 
-for df in [df_pool]:
-    df['Threads'] = pd.to_numeric(df['Threads'])
-    df['Tempo Medio'] = pd.to_numeric(df['Tempo Medio'])
-    df['Deviazione Standard'] = pd.to_numeric(df['Deviazione Standard'])
-    df.sort_values(by='Threads', inplace=True)
+df_pool['Threads'] = pd.to_numeric(df_pool['Threads'])
+df_pool['Tempo Medio'] = pd.to_numeric(df_pool['Tempo Medio'])
+df_pool['Deviazione Standard'] = pd.to_numeric(df_pool['Deviazione Standard'])
+df_pool.sort_values(by='Threads', inplace=True)
 
 df_pool['Speedup'] = t_seq / df_pool['Tempo Medio']
 
@@ -71,10 +70,10 @@ df_chunk['Deviazione Standard'] = pd.to_numeric(df_chunk['Deviazione Standard'])
 
 chunk_sizes = sorted(df_chunk['Chunk Size'].unique(), reverse=True)
 x = np.arange(len(chunk_sizes))
-width = 0.35
+width = 0.5
 
-pool_means, pool_stds = [], []
-threads_means, threads_stds = [], []
+pool_means = []
+pool_stds = []
 
 for val in chunk_sizes:
     p_row = df_chunk[(df_chunk['Implementazione'] == 'Parallel Pool') & (df_chunk['Chunk Size'] == val)]
@@ -83,7 +82,7 @@ for val in chunk_sizes:
     pool_stds.append(p_row['Deviazione Standard'].values[0])
 
 fig, ax = plt.subplots(figsize=(10, 6))
-bars1 = ax.bar(x - width / 2, pool_means, width, yerr=pool_stds, label='Parallel Pool', color='skyblue',
+bars = ax.bar(x, pool_means, width, yerr=pool_stds, label='Parallel Pool', color='skyblue',
                edgecolor='black', capsize=5)
 
 ax.set_title('Effetto della Dimensione del Chunk Size (4 Threads)', fontsize=14, fontweight='bold')
@@ -95,13 +94,13 @@ ax.grid(axis='y', linestyle='--', alpha=0.7)
 ax.legend(fontsize=11)
 
 
-def autolabel(bars):
-    for bar in bars:
+def autolabel(bars_obj):
+    for bar in bars_obj:
         yval = bar.get_height()
         ax.text(bar.get_x() + bar.get_width() / 2, yval + 0.5, round(yval, 2), ha='center', va='bottom', fontsize=9)
 
 
-autolabel(bars1)
+autolabel(bars)
 
 plt.savefig(os.path.join(output_dir, '3_chunk_size_effect.png'), dpi=300, bbox_inches='tight')
 plt.close(fig)

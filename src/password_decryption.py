@@ -1,7 +1,7 @@
 import threading
 from passlib.hash import des_crypt
 import random
-from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED, as_completed
+from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 import itertools
 import config
 
@@ -49,7 +49,7 @@ def decrypt_password_par_pool(target_hashes, num_workers, chunk_size):
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
         futures = set()
 
-        # Si riempiono il pool con i primi task
+        # Si riempiono i pool con i primi task
         for _ in range(num_workers):
             chunk = list(itertools.islice(iterator, chunk_size))
             if not chunk:
@@ -57,10 +57,10 @@ def decrypt_password_par_pool(target_hashes, num_workers, chunk_size):
             futures.add(executor.submit(check_chunk, chunk, target_hashes, stop_event))
 
         while futures and not stop_event.is_set():
-            # Si aspetta che almeno task finisca
+            # Si aspetta che almeno un task finisca
             done, not_done = wait(futures, return_when=FIRST_COMPLETED)
 
-            # Si analizza i task completati
+            # Si analizzano i task completati
             for future in done:
                 result = future.result()
                 if result:
