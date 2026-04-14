@@ -159,7 +159,6 @@ def run_benchmarks():
 
     run_sequential(targets, runs, dump_data)
     run_parallel(targets, runs, dump_data, p.decrypt_password_par_pool, "Parallel Pool")
-    run_parallel(targets, runs, dump_data, p.decrypt_password_par_threads, "Parallel Threads")
 
     write_csv(file_path, dump_data)
 
@@ -167,7 +166,6 @@ def run_benchmarks():
     dump_data = [['Implementazione', 'Threads', 'Chunk Size', 'Tempo Medio', 'Deviazione Standard']]
 
     run_chunk_size_analysis(targets, runs, dump_data, p.decrypt_password_par_pool, "Parallel Pool")
-    run_chunk_size_analysis(targets, runs, dump_data, p.decrypt_password_par_threads, "Parallel Threads")
 
     write_csv(file_path, dump_data)
 
@@ -178,7 +176,6 @@ def run_benchmarks():
     dump_data = [['Implementazione', 'Threads', 'Dataset Size (N)', 'Chunk Size', 'Tempo Medio', 'Deviazione Standard']]
 
     run_weak_scaling(targets, runs, dump_data, p.decrypt_password_par_pool, "Parallel Pool")
-    run_weak_scaling(targets, runs, dump_data, p.decrypt_password_par_threads, "Parallel Threads")
 
     write_csv(file_path, dump_data)
 
@@ -187,7 +184,7 @@ def run_demo():
     passwords = ["01011990", "f5082005", "31122026"]
     targets = build_targets(passwords)
     threads = 4
-    chunk_size = c.N // (threads * 10)
+    chunk_size = c.N // (threads * 1000)
 
     print(f"\nLista di password: {passwords} da trovare.")
 
@@ -204,15 +201,6 @@ def run_demo():
 
     start = time.perf_counter()
     passwords_trovate = p.decrypt_password_par_pool(targets, threads, chunk_size)
-    end = time.perf_counter()
-
-    print(f"Passwords trovate: {passwords_trovate}")
-    print("Tempo di esecuzione: ", end - start)
-
-    print("\nParallela con thread:")
-
-    start = time.perf_counter()
-    passwords_trovate = p.decrypt_password_par_threads(targets, threads, chunk_size)
     end = time.perf_counter()
 
     print(f"Passwords trovate: {passwords_trovate}")

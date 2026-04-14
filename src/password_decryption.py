@@ -83,39 +83,6 @@ def decrypt_password_par_pool(target_hashes, num_workers, chunk_size):
                         break
     return passwords_trovate
 
-def decrypt_password_par_threads(target_hashes, num_workers, chunk_size):
-    iterator = iter(generate_date_passwords())
-    stop_event = threading.Event()
-    passwords_trovate = {}
-    total_targets = len(target_hashes)
-    lock = threading.Lock()
-    end_list = False
-
-    def worker(chunk):
-        nonlocal passwords_trovate
-        result = check_chunk(chunk, target_hashes, stop_event)
-        with lock:
-            passwords_trovate.update(result)
-            if len(passwords_trovate) >= total_targets:
-                stop_event.set()
-
-    while not stop_event.is_set() and not end_list:
-        threads: list[threading.Thread] = []
-
-        for i in range(num_workers):
-            chunk = list(itertools.islice(iterator, chunk_size))
-            if not chunk:
-                end_list = True
-                break
-            t = threading.Thread(target=worker, args=(chunk, ))
-            threads.append(t)
-            t.start()
-
-        for t in threads:
-            t.join()
-
-    return passwords_trovate
-
 def generate_date_passwords():
     for year in range(config.START_YEAR, config.END_YEAR+1):
         for month in range(1, 13):

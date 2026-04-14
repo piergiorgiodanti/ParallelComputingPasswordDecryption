@@ -15,25 +15,21 @@ t_seq = float(seq_row['Tempo Medio'])
 std_seq = float(seq_row['Deviazione Standard'])
 
 df_pool = df_strong[df_strong['Implementazione'] == 'Parallel Pool'].copy()
-df_threads = df_strong[df_strong['Implementazione'] == 'Parallel Threads'].copy()
 
-for df in [df_pool, df_threads]:
+for df in [df_pool]:
     df['Threads'] = pd.to_numeric(df['Threads'])
     df['Tempo Medio'] = pd.to_numeric(df['Tempo Medio'])
     df['Deviazione Standard'] = pd.to_numeric(df['Deviazione Standard'])
     df.sort_values(by='Threads', inplace=True)
 
 df_pool['Speedup'] = t_seq / df_pool['Tempo Medio']
-df_threads['Speedup'] = t_seq / df_threads['Tempo Medio']
 
 threads_list = [1] + df_pool['Threads'].tolist()
 speedup_pool = [1.0] + df_pool['Speedup'].tolist()
-speedup_threads = [1.0] + df_threads['Speedup'].tolist()
 
 # Grafico 1: Speedup
 plt.figure(figsize=(9, 6))
 plt.plot(threads_list, speedup_pool, marker='o', color='b', linewidth=2, label='Speedup (Parallel Pool)')
-plt.plot(threads_list, speedup_threads, marker='^', color='r', linewidth=2, label='Speedup (Parallel Threads)')
 plt.plot([1, max(threads_list)], [1, max(threads_list)], 'k--', label='Speedup Ideale (Lineare)')
 
 plt.title('Curva di Speedup (Strong Scaling)', fontsize=14, fontweight='bold')
@@ -48,7 +44,6 @@ plt.close()
 # Grafico 2: Weak Scaling
 df_weak['Threads'] = pd.to_numeric(df_weak['Threads'])
 df_weak_pool = df_weak[df_weak['Implementazione'] == 'Parallel Pool'].sort_values(by='Threads')
-df_weak_threads = df_weak[df_weak['Implementazione'] == 'Parallel Threads'].sort_values(by='Threads')
 
 t_weak_1 = df_weak_pool[df_weak_pool['Threads'] == 1]['Tempo Medio'].values[0]
 x_labels = [f"Th: {row['Threads']}\n(N={int(row['Dataset Size (N)'])})" for _, row in df_weak_pool.iterrows()]
@@ -56,8 +51,6 @@ x_labels = [f"Th: {row['Threads']}\n(N={int(row['Dataset Size (N)'])})" for _, r
 plt.figure(figsize=(9, 6))
 plt.plot(df_weak_pool['Threads'], df_weak_pool['Tempo Medio'], marker='s', color='purple', linewidth=2,
          label='Tempo (Parallel Pool)')
-plt.plot(df_weak_threads['Threads'], df_weak_threads['Tempo Medio'], marker='D', color='orange', linewidth=2,
-         label='Tempo (Parallel Threads)')
 plt.axhline(y=t_weak_1, color='k', linestyle='--', label='Scalabilità Ideale (Tempo Costante)')
 
 plt.title('Weak Scaling', fontsize=14, fontweight='bold')
@@ -85,17 +78,12 @@ threads_means, threads_stds = [], []
 
 for val in chunk_sizes:
     p_row = df_chunk[(df_chunk['Implementazione'] == 'Parallel Pool') & (df_chunk['Chunk Size'] == val)]
-    t_row = df_chunk[(df_chunk['Implementazione'] == 'Parallel Threads') & (df_chunk['Chunk Size'] == val)]
 
     pool_means.append(p_row['Tempo Medio'].values[0])
     pool_stds.append(p_row['Deviazione Standard'].values[0])
-    threads_means.append(t_row['Tempo Medio'].values[0])
-    threads_stds.append(t_row['Deviazione Standard'].values[0])
 
 fig, ax = plt.subplots(figsize=(10, 6))
 bars1 = ax.bar(x - width / 2, pool_means, width, yerr=pool_stds, label='Parallel Pool', color='skyblue',
-               edgecolor='black', capsize=5)
-bars2 = ax.bar(x + width / 2, threads_means, width, yerr=threads_stds, label='Parallel Threads', color='lightcoral',
                edgecolor='black', capsize=5)
 
 ax.set_title('Effetto della Dimensione del Chunk Size (4 Threads)', fontsize=14, fontweight='bold')
@@ -114,7 +102,6 @@ def autolabel(bars):
 
 
 autolabel(bars1)
-autolabel(bars2)
 
 plt.savefig(os.path.join(output_dir, '3_chunk_size_effect.png'), dpi=300, bbox_inches='tight')
 plt.close(fig)
@@ -124,14 +111,9 @@ plt.close()
 times_pool = [t_seq] + df_pool['Tempo Medio'].tolist()
 stdev_pool = [std_seq] + df_pool['Deviazione Standard'].tolist()
 
-times_threads = [t_seq] + df_threads['Tempo Medio'].tolist()
-stdev_threads = [std_seq] + df_threads['Deviazione Standard'].tolist()
-
 plt.figure(figsize=(10, 6))
 plt.errorbar(threads_list, times_pool, yerr=stdev_pool, fmt='-o', color='teal',
              ecolor='teal', elinewidth=2, capsize=5, markersize=8, label='Parallel Pool')
-plt.errorbar(threads_list, times_threads, yerr=stdev_threads, fmt='-s', color='darkred',
-             ecolor='darkred', elinewidth=2, capsize=5, markersize=8, label='Parallel Threads')
 
 plt.title('Wall-clock Time', fontsize=14, fontweight='bold')
 plt.xlabel('Numero di Threads', fontsize=12)
