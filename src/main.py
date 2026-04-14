@@ -184,7 +184,7 @@ def run_demo():
     passwords = ["01011990", "05082005", "31122026"]
     targets = build_targets(passwords)
     threads = 4
-    chunk_size = c.N // (threads * 1000)
+    chunk_size = c.N // (threads * 10)
 
     print(f"\nLista di password: {passwords} da trovare.")
 
