@@ -43,10 +43,10 @@ def benchmark(func, runs, *args, **kwargs):
         computation_times.append(elapsed)
         print(f">> {elapsed}")
 
-    median = statistics.median(computation_times) if runs > 1 else 0
+    mean = statistics.mean(computation_times) if runs > 1 else 0
     dev_standard = statistics.stdev(computation_times) if runs > 1 else 0
 
-    return median, dev_standard, result
+    return mean, dev_standard, result
 
 
 def write_csv(file_path, data):
@@ -58,13 +58,13 @@ def write_csv(file_path, data):
 def run_sequential(targets, runs, dump_data):
     print("\n\nImplementazione Sequenziale:")
 
-    median, dev_standard, passwords_trovate = benchmark(
+    mean, dev_standard, passwords_trovate = benchmark(
         p.decrypt_passwords, runs, targets
     )
 
-    print(f"Tempo medio: {median} Deviazione standard: {dev_standard}\nPassword trovata: {passwords_trovate}")
+    print(f"Tempo medio: {mean} Deviazione standard: {dev_standard}\nPassword trovata: {passwords_trovate}")
 
-    dump_data.append(['Sequenziale', '-', '-', median, dev_standard])
+    dump_data.append(['Sequenziale', '-', '-', mean, dev_standard])
 
 
 def run_parallel(targets, runs, dump_data, decrypt_password_par, info):
@@ -78,7 +78,7 @@ def run_parallel(targets, runs, dump_data, decrypt_password_par, info):
 
         print(f"\nnum. threads: {thread} chunk size: {chunk_size}")
 
-        median, dev_standard, passwords_trovate = benchmark(
+        mean, dev_standard, passwords_trovate = benchmark(
             decrypt_password_par,
             runs,
             targets,
@@ -86,9 +86,9 @@ def run_parallel(targets, runs, dump_data, decrypt_password_par, info):
             chunk_size=chunk_size
         )
 
-        print(f"Tempo medio: {median} Deviazione standard: {dev_standard}\nPassword trovata: {passwords_trovate}")
+        print(f"Tempo medio: {mean} Deviazione standard: {dev_standard}\nPassword trovata: {passwords_trovate}")
 
-        dump_data.append([info, thread, chunk_size, median, dev_standard])
+        dump_data.append([info, thread, chunk_size, mean, dev_standard])
 
 
 def run_chunk_size_analysis(targets, runs, dump_data, decrypt_password_par, info):
@@ -101,7 +101,7 @@ def run_chunk_size_analysis(targets, runs, dump_data, decrypt_password_par, info
     for chunk_size in chunks_size:
         print(f"\nnum. threads: {thread} chunk size: {chunk_size}")
 
-        median, dev_standard, passwords_trovate = benchmark(
+        mean, dev_standard, passwords_trovate = benchmark(
             decrypt_password_par,
             runs,
             targets,
@@ -109,9 +109,9 @@ def run_chunk_size_analysis(targets, runs, dump_data, decrypt_password_par, info
             chunk_size=chunk_size
         )
 
-        print(f"Tempo medio: {median} Deviazione standard: {dev_standard}\nPassword trovata: {passwords_trovate}")
+        print(f"Tempo medio: {mean} Deviazione standard: {dev_standard}\nPassword trovata: {passwords_trovate}")
 
-        dump_data.append([info, thread, chunk_size, median, dev_standard])
+        dump_data.append([info, thread, chunk_size, mean, dev_standard])
 
 def run_weak_scaling(targets, runs, dump_data, decrypt_password_par, info):
     print(f"\n\n{info}")
@@ -131,7 +131,7 @@ def run_weak_scaling(targets, runs, dump_data, decrypt_password_par, info):
 
         print(f"Threads: {thread} Data Size: {c.N} Time: {c.START_YEAR}-{c.END_YEAR}")
 
-        median, dev_standard, passwords_trovate = benchmark(
+        mean, dev_standard, passwords_trovate = benchmark(
             decrypt_password_par,
             runs,
             targets,
@@ -139,9 +139,9 @@ def run_weak_scaling(targets, runs, dump_data, decrypt_password_par, info):
             chunk_size=chunk_size
         )
 
-        print(f"Tempo medio: {median} Deviazione standard: {dev_standard}\nPassword trovata: {passwords_trovate}")
+        print(f"Tempo medio: {mean} Deviazione standard: {dev_standard}\nPassword trovata: {passwords_trovate}")
 
-        dump_data.append([info, thread, c.N, chunk_size, median, dev_standard])
+        dump_data.append([info, thread, c.N, chunk_size, mean, dev_standard])
 
 def run_benchmarks():
 
